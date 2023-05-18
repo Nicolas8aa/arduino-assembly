@@ -66,3 +66,30 @@ Assembly language contains reserved words that are commands: ldi load immediate,
 Words like DDRB and PORTB are not part of the assembly language. We have to define them with a definitions file which lists equivalent values. We add a text document of definitions m328pdef.inc from Atmel that says to substitute the number 0x04 for DDRB and 0x05 for PORTB.
 
 An attachment to this project is a working copy of the definitions file. You can find other copies for this processor and for many more on the web. The filename must be spelled correctly.
+
+## Compile and Upload
+
+### Generate the hex file
+
+Type `$ avra code.asm` on the terminal while in the same directory as the assembler source code and the definitions file.
+
+![avra](assets/avracode.png)
+
+The assembler will generate a hex file with the same name as the source code. The hex file is the machine code that will be uploaded to the Arduino.
+
+### Upload the hex file with Avrdude
+
+We are going to upload our program to an Arduino Uno board just like the Arduino IDE program. Connect the board to a USB port on the computer and then type `$ ls /dev/tty*`.
+
+![ls](assets/ls.webp)
+Our Arduino Uno is shown as **/dev/ttyACM0**. Unplug the board and repeat the command you will see it disappear from the listing.
+
+**/dev/ttyUSB0** is an Arduino clone board that has a CH340 programmer circuit. Avrdude sees both devices as a `-c arduino` programmer.
+
+Type `$ avrdude -p atmega328p -c arduino -P /dev/ttyACM0 -U flash:w:count.hex:i` the transmit and receive lamps on the Arduino board will blink rapidly during upload. Then the built in LED on the Uno board will blink about once a second.
+
+![avrdude](assets/avrdude.webp)
+
+## Conclusion
+
+The LED built into the Arduino Uno board should be blinking on and off about once a second.
